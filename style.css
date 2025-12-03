@@ -1,0 +1,104 @@
+:root {
+	--nav-color: #101029;
+	--bg-color: #32435D;
+	--title-color: #FBC81E;
+	--subtitle-color: #D47E2F;
+	--text-color: #E6E9EF;
+	--accent-color: #258C88;
+	--err-color: #ff5b24;
+	--success-color: #70ff88;
+}
+
+body {
+	margin: 0;
+	display: flex;
+	height: 100vh;
+}
+
+h1 {
+	color: var(--title-color);
+	text-align: center;
+}
+
+h2 {
+	color: var(--subtitle-color);
+	text-align: center;
+}
+
+.errmsg {
+	color: var(--err-color);
+}
+
+p {
+	color: var(--text-color);
+}
+
+nav {
+	width: 200px;
+	background: var(--nav-color);
+	border-right: 1px solid white;
+}
+nav ul li a {
+	text-decoration: none;
+	color: var(--text-color);
+	display: inline-block;
+	transition: color 0.4s ease, transform 0.4*s ease;
+}
+
+nav ul li a:hover {
+	color: var(--accent-color);
+	transform: scale(1.15);
+}
+
+nav ul li {
+	list-style: none;
+}
+
+main {
+	flex: 1;
+	background : var(--bg-color);
+	padding-left : 0.4rem;
+}
+
+.successmsg {
+	color: var(--success-color);
+}
+
+.commentbox {
+	margin: 10px auto;
+	margin-left:15%;
+	margin-right:15%;
+	padding: 15px;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	text-align: left;
+}
+.commentbox p {
+    margin: 5px 0;
+}
+.commentbox strong {
+	color: var(--accent-color);
+}
+
+.commentbox small {
+    font-size: 0.9em;
+	color: var(--title-color);
+}
+
+#formdiv {
+	margin: auto;
+	padding: 15px;
+	margin-left: 30%;
+	margin-right: 30%;
+	margin-bottom: 5rem;
+	text-align: center;
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+}
+
+footer {
+	color: var(--text-color);
+	text-align: center;
+}
