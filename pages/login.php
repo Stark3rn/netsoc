@@ -14,6 +14,7 @@ if(isset($_POST["action"]) && $_POST["action"] === "auth_user") {
             $errUser = "Identifiants invalides";
         } else {
 	    create_session($user["id_user"]);
+	    header("Location: index.php");
             exit;
         }
     }
