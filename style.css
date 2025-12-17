@@ -60,6 +60,11 @@ main {
 	padding-left : 0.4rem;
 }
 
+a {
+	text-decoration: false;
+	color: var(--text-color);
+}
+
 .successmsg {
 	color: var(--success-color);
 }

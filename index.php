@@ -4,32 +4,28 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<nav>
-<ul>
 <?php
-include("utils.php");
-$pages = get_all_pages("./pages");
-foreach($pages as $page) {
-        $name = str_replace(".php", "", $page);
+include_once("database.php");
+if(!check_session()) { 	//	Ajouter && usersession in DB sessions
+?>	
+<main>
+<?php
+
+	if(isset($_GET["page"]) && @$_GET["page"] == "login.php") {
+        	include("pages/login.php");	
+	} else if (@$_GET["page"] == "register.php") {
+		include("pages/register.php");
+	} else {
+		include("pages/login.php");
+	}
 ?>
-<li>
-    <a href="index.php?page=<?= $page ?>"><?= $name ?></a>
-</li>
+
+
+
 <?php
-}
-?>
-</ul>
-</nav>
-<?php
-if(isset($_GET["page"])) {
-        $arg = $_GET["page"];
-        if(in_array($arg,$pages)) {
-                include("pages/".$arg);
-        } else {
-                echo("Sorry... Anubis protects the deaths, but... This page doesn't exists.");
-        }
 } else {
-        include("pages/accueil.php");
+	echo("Session ok !");
 }
 ?>
+</main>
 </body>
