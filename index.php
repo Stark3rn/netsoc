@@ -20,12 +20,29 @@ if(!check_session()) { 	//	Ajouter && usersession in DB sessions
 	}
 ?>
 
-
+</main>
 
 <?php
 } else {
-	echo("Session ok !");
-}
+?>
+<section class="navbar">
+    <nav>
+	<ul>
+	    <li><a href="?page=accueil.php">Accueil</a></li>
+	    <li><a href="?page=profile.php">Mon profil</a></li>
+    	</ul>
+    </nav>
+</section>
+<main>
+<?php
+	if(isset($_GET["page"]) && $_GET["page"] == "profile.php") {
+		echo("informations de profil");
+	} else {
+		include_once("pages/accueil.php");
+	}
 ?>
 </main>
+<?php
+}
+?>
 </body>
