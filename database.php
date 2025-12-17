@@ -150,26 +150,31 @@ function generateToken() {
     return bin2hex(random_bytes(64));
 }
 
-function create_session($id_user) {
-	global $Database;
+function create_or_update_session($id_user) {
+    global $Database;
 
-	$fields["ip"] = $_SERVER['REMOTE_ADDR'];
-	$fields["token"] = generateToken();
-	$fields["id_user"] = $id_user;
-	$fields["expiration_date"] = date(
-        	"Y-m-d H:i:s",
-        	time() + 7200
-	);
-	insert_fields("session",$fields);
+    $token = bin2hex(random_bytes(64));
+    $expiration = date("Y-m-d H:i:s", time() + 7200);
+    $ip = $_SERVER['REMOTE_ADDR'];
 
-	setcookie("usersession",$fields["token"],
-        [
-            "expires"  => time() + 3600,
-            "path"     => "/",
-            "secure"   => true,
-            "httponly" => true,
-            "samesite" => "Strict"
-        ]);
+    $stmt = $Database->prepare("
+        INSERT INTO session (id_user, token, ip, expiration_date)
+        VALUES (?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE
+            token = VALUES(token),
+            ip = VALUES(ip),
+            expiration_date = VALUES(expiration_date)
+    ");
+
+    $stmt->execute([$id_user, $token, $ip, $expiration]);
+
+    setcookie("usersession", $token, [
+        "expires"  => time() + 3600,
+        "path"     => "/",
+        "secure"   => true,
+        "httponly" => true,
+        "samesite" => "Strict"
+    ]);
 }
 
 function check_session() {
@@ -195,6 +200,5 @@ function check_session() {
 	return(null);
     }
 }
-
 
 ?>
