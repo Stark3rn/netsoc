@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <head>
-<title>NetSoc</title>
+<title>Nubii</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <?php
 include_once("database.php");
-if(!check_session()) { 	//	Ajouter && usersession in DB sessions
+if(!check_session()) {
 ?>	
 <main>
 <?php
@@ -36,7 +36,7 @@ if(!check_session()) { 	//	Ajouter && usersession in DB sessions
 <main>
 <?php
 	if(isset($_GET["page"]) && $_GET["page"] == "profile.php") {
-		echo("informations de profil");
+		include_once("pages/profile.php");
 	} else {
 		include_once("pages/accueil.php");
 	}

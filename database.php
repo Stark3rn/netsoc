@@ -201,4 +201,58 @@ function check_session() {
     }
 }
 
+function getPDO(): PDO
+{
+    return new PDO(
+        "mysql:host=localhost;dbname=ta_base;charset=utf8mb4",
+        "ton_user",
+        "ton_mot_de_passe",
+        [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+        ]
+    );
+}
+
+function getUserIdFromSession(string $sessionToken): int|false
+{
+    global $Database;
+
+    $sql = "
+        SELECT id_user
+        FROM session
+        WHERE token = :token
+        LIMIT 1
+    ";
+
+    $stmt = $Database->prepare($sql);
+    $stmt->execute([
+        ':token' => $sessionToken
+    ]);
+
+    $row = $stmt->fetch();
+    return $row ? (int)$row['id_user'] : false;
+}
+
+function getUserProfile(int $idUser): array|false
+{
+    global $Database;
+
+    $sql = "
+        SELECT id_user, username, email, created
+        FROM users
+        WHERE id_user = :id
+        AND deleted IS NULL
+        LIMIT 1
+    ";
+
+    $stmt = $Database->prepare($sql);
+    $stmt->execute([
+        ':id' => $idUser
+    ]);
+
+    return $stmt->fetch();
+}
+
+
 ?>

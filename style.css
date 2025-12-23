@@ -107,3 +107,7 @@ footer {
 	color: var(--text-color);
 	text-align: center;
 }
+
+.username {
+	text-align: left;
+}
