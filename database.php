@@ -34,6 +34,25 @@ function validate_login($login, $pass)
     return false;
 }
 
+function add_user($args) 
+{
+    global $Database;
+    if (strlen($args['username']) < 5) return -2;
+    if (!filter_var($args['email'], FILTER_VALIDATE_EMAIL)) return -3;
+    
+    try 
+    {
+        $hash = password_hash($args['password'], PASSWORD_DEFAULT);
+        $stmt = $Database->prepare("INSERT INTO users (username, email, pass_hash) VALUES (?, ?, ?)");
+        $stmt->execute([$args['username'], $args['email'], $hash]);
+        return true;
+    } 
+    catch (Exception $e) 
+    {
+        return -1; 
+    }
+}
+
 function create_or_update_session($id_user) 
 {
     global $Database;
