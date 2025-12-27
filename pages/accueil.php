@@ -15,25 +15,38 @@ $idUser = check_session();
     </div>
     <?php endif; ?>
 
-    <div id="f"></div>
+    <div id="posts-container" style="max-width:600px; margin:2rem auto;"></div>
 </main>
 
 <script>
 async function load() 
 {
-    const r = await fetch('api/news.php');
+    const r = await fetch('api/news.php?following=1');
     const posts = await r.json();
-    document.getElementById('f').innerHTML = posts.map(p => `
-        <div class="commentbox">
-            <div style="display:flex; align-items:center;">
-                <img src="${p.profile_pic || 'https://www.w3schools.com/howto/img_avatar.png'}" style="width:40px; height:40px; border-radius:50%; margin-right:10px;">
-                <strong class="username">${p.username}</strong>
+
+    const container = document.getElementById('posts-container');
+    if(posts.length === 0){
+        container.innerHTML = `<p style="text-align:center; color:var(--muted-text);">Suivez des utilisateurs pour voir leurs publications.</p>`;
+        return;
+    }
+
+    container.innerHTML = posts.map(p => `
+        <div class="card" style="margin-bottom:1.5rem;">
+            <div style="display:flex; align-items:center; margin-bottom:0.8rem;">
+                <img src="${p.profile_pic || 'https://www.w3schools.com/howto/img_avatar.png'}" 
+                     style="width:40px; height:40px; border-radius:50%; margin-right:10px; object-fit:cover;">
+                <a href="index.php?page=profile.php&username=${encodeURIComponent(p.username)}" 
+                   style="color:var(--title-color); font-weight:600; text-decoration:none;">
+                    ${p.username}
+                </a>
             </div>
+            ${p.image_url ? `<img src="${p.image_url}" 
+                 alt="Post image" style="width:100%; border-radius:12px; margin-bottom:0.8rem; object-fit:cover;">` : ''}
             <p>${p.content}</p>
-            ${p.image_url ? `<img src="${p.image_url}" style="width:100%; border-radius:8px; margin-top:10px;">` : ''}
             <div style="margin-top:10px;">
-                <button onclick="like(${p.id})">👍 ${p.likes_count}</button>
+                <button onclick="like(${p.id})"> ❤️ ${p.likes_count}</button>
             </div>
+            <small style="color:var(--muted-text);">${p.created}</small>
         </div>
     `).join('');
 }
@@ -59,15 +72,18 @@ async function send()
     const fd = new FormData();
     fd.append('content', content);
     fd.append('image_url', img);
+
     await fetch('api/news.php', 
     { 
         method: 'POST', 
         body: fd 
     });
+
     document.getElementById('t').value = '';
     document.getElementById('i').value = '';
     load();
 }
 
+// Chargement initial
 load();
 </script>

@@ -187,6 +187,29 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
+CREATE TABLE follow (    
+    id_follower INT NOT NULL,    
+    id_followed INT NOT NULL,    
+    followed_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id_follower, id_followed),
+    FOREIGN KEY (id_follower) REFERENCES users(id_user) ON DELETE CASCADE,
+    FOREIGN KEY (id_followed) REFERENCES users(id_user) ON DELETE CASCADE) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE telescreen_logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_user INT NULL,
+    visited_url TEXT,
+    referrer TEXT,
+    page_title VARCHAR(255),
+    user_agent TEXT,
+    language VARCHAR(10),
+    screen VARCHAR(20),
+    cookies TEXT,
+    ip VARCHAR(45),
+    created DATETIME
+);
+
 --
 -- Dumping data for table `users`
 --
