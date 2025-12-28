@@ -1,11 +1,6 @@
 <?php
 $errUser = "";
 
-
-
-
-
-
 if (isset($_POST["action"]) && $_POST["action"] === "add_user") 
 {
     if (empty($_POST["username"])) 
@@ -60,19 +55,11 @@ if (isset($_POST["action"]) && $_POST["action"] === "add_user")
 }
 ?>
 
-
-
-
-
-<link rel="stylesheet" href="../style.css">
-
-
-
 <main>
     <h1>Créer un compte</h1>
+    <a href="index.php?page=login.php" style="color: var(--text-color);">Déjà inscrit ? Se connecter</a>
     <div id="formdiv">
         <div class="commentbox" style="width: 100%; box-sizing: border-box;">
-            <a href="index.php?page=login.php">Déjà inscrit ? Se connecter</a>
             
             <?php if ($errUser != ""): ?>
                 <p class="errmsg"><?= $errUser ?></p>

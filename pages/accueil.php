@@ -1,7 +1,13 @@
 <?php
 require_once(__DIR__ . "/../database.php");
 $idUser = check_session();
+
+$stmt = $Database->prepare("SELECT promote FROM users WHERE id_user = ? LIMIT 1");
+$stmt->execute([$idUser]);
+$result = $stmt->fetch();
+$promote = $result['promote'];
 ?>
+
 <link rel="stylesheet" href="../style.css">
 
 <main>
@@ -14,11 +20,27 @@ $idUser = check_session();
         <button onclick="send()" style="width:100%; cursor:pointer;">Publier</button>
     </div>
     <?php endif; ?>
-
+    <div id="ads-container" style="max-width:600px; margin:1rem auto; text-align:center;"></div>
     <div id="posts-container" style="max-width:600px; margin:2rem auto;"></div>
 </main>
 
 <script>
+const PROMOTE = <?= (int)$promote ?>;
+async function loadAd() {
+    if (PROMOTE !== 1) return;
+
+    const r = await fetch('http://localhost/netsoc/api/ads.php?get_ads=1');
+    const data = await r.json();
+    if (!data.ad_image) return;
+
+    const adsContainer = document.getElementById('ads-container');
+    adsContainer.innerHTML = `
+        <img src="${data.ad_image}"
+             alt="Publicité"
+             style="max-width:100%; border-radius:12px;">
+    `;
+}
+
 async function load() 
 {
     const r = await fetch('api/news.php?following=1');
@@ -86,4 +108,5 @@ async function send()
 
 // Chargement initial
 load();
+loadAd();
 </script>

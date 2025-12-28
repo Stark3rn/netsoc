@@ -17,6 +17,36 @@
 /*M!100616 SET @OLD_NOTE_VERBOSITY=@@NOTE_VERBOSITY, NOTE_VERBOSITY=0 */;
 
 --
+-- Table structure for table `ads`
+--
+
+DROP TABLE IF EXISTS `ads`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `ads` (
+  `id_user` int(11) NOT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT 0,
+  `ad_image` varchar(75) DEFAULT NULL,
+  PRIMARY KEY (`id_user`),
+  KEY `id_user` (`id_user`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ads`
+--
+
+LOCK TABLES `ads` WRITE;
+/*!40000 ALTER TABLE `ads` DISABLE KEYS */;
+set autocommit=0;
+INSERT INTO `ads` VALUES
+(3,1,'3_lenovo.png'),
+(4,1,'4_floral.jpg');
+/*!40000 ALTER TABLE `ads` ENABLE KEYS */;
+UNLOCK TABLES;
+commit;
+
+--
 -- Table structure for table `comments`
 --
 
@@ -49,6 +79,37 @@ UNLOCK TABLES;
 commit;
 
 --
+-- Table structure for table `follow`
+--
+
+DROP TABLE IF EXISTS `follow`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `follow` (
+  `id_follower` int(11) NOT NULL,
+  `id_followed` int(11) NOT NULL,
+  `followed_at` datetime DEFAULT current_timestamp(),
+  PRIMARY KEY (`id_follower`,`id_followed`),
+  KEY `id_followed` (`id_followed`),
+  CONSTRAINT `1` FOREIGN KEY (`id_follower`) REFERENCES `users` (`id_user`) ON DELETE CASCADE,
+  CONSTRAINT `2` FOREIGN KEY (`id_followed`) REFERENCES `users` (`id_user`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `follow`
+--
+
+LOCK TABLES `follow` WRITE;
+/*!40000 ALTER TABLE `follow` DISABLE KEYS */;
+set autocommit=0;
+INSERT INTO `follow` VALUES
+(4,3,'2025-12-28 14:45:54');
+/*!40000 ALTER TABLE `follow` ENABLE KEYS */;
+UNLOCK TABLES;
+commit;
+
+--
 -- Table structure for table `likes`
 --
 
@@ -64,7 +125,7 @@ CREATE TABLE `likes` (
   KEY `id_user` (`id_user`),
   CONSTRAINT `1` FOREIGN KEY (`id_post`) REFERENCES `posts` (`id`) ON DELETE CASCADE,
   CONSTRAINT `2` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_user`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -78,7 +139,8 @@ INSERT INTO `likes` VALUES
 (7,2,1),
 (2,2,3),
 (8,4,1),
-(3,4,3);
+(3,4,3),
+(12,5,4);
 /*!40000 ALTER TABLE `likes` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -99,7 +161,7 @@ CREATE TABLE `posts` (
   PRIMARY KEY (`id`),
   KEY `id_user` (`id_user`),
   CONSTRAINT `1` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_user`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -113,7 +175,8 @@ INSERT INTO `posts` VALUES
 (1,1,'hello','2025-12-24 16:55:17',NULL),
 (2,1,'hellloo','2025-12-25 18:25:16',NULL),
 (3,3,'heelllo','2025-12-25 17:36:37','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRT9ApJg1ouiNEVo6MA4Kd4xONVdgenUKLRvg&s'),
-(4,3,'hello','2025-12-25 17:44:27','https://i1.sndcdn.com/avatars-ATWPHCpNLqNVDyuZ-MIDqfw-t240x240.jpg');
+(4,3,'hello','2025-12-25 17:44:27','https://i1.sndcdn.com/avatars-ATWPHCpNLqNVDyuZ-MIDqfw-t240x240.jpg'),
+(5,4,'Bonjour à tous !\r\nJe fais un petit post pour me présenter :)','2025-12-27 15:35:37','https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic1.cbrimages.com%2Fwordpress%2Fwp-content%2Fuploads%2F2023%2F12%2Fthe-eminence-in-shadow-john-smith.jpg&f=1&nofb=1&ipt=2092f1647d050b399739f2db5f9a99a282c28c4ac49483914f5b388a85d3166b');
 /*!40000 ALTER TABLE `posts` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -136,7 +199,7 @@ CREATE TABLE `session` (
   PRIMARY KEY (`id_session`),
   KEY `id_user` (`id_user`),
   CONSTRAINT `1` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_user`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -160,8 +223,51 @@ INSERT INTO `session` VALUES
 (11,1,'','2025-12-25 18:25:10','::1','409f01939ab0e2199d1f581a855531a6942e4f50fa67d82a1fe15a545c96f49fe911200395357b490af2e135abc7a812308ebed9089bf6ae0afc3fd0cf170c14','2025-12-25 20:25:10'),
 (12,3,'','2025-12-25 18:25:30','::1','613dbf748236366f71bab89fb77cf806ca01aab4ebdd3ce121995ba9552450fc189e861fc76a175da9e4ae085888dbf7996dc129a0484ee6a8d434f21a4e2412','2025-12-25 20:25:30'),
 (13,1,'','2025-12-25 22:54:00','','bee76c9f60a874ea3563f9e17ba1b7e7932449b9c6840cedb62a3425dfda61e7','2025-12-26 23:54:00'),
-(14,1,'','2025-12-27 02:57:01','','04208b399a95e1fe8eb2a4ee0e207a39a61864fbb358a563309365c8f7bed95f','2025-12-28 03:57:01');
+(14,1,'','2025-12-27 02:57:01','','04208b399a95e1fe8eb2a4ee0e207a39a61864fbb358a563309365c8f7bed95f','2025-12-28 03:57:01'),
+(15,4,'','2025-12-27 15:34:10','','a2863119cd6766a9411763a57f8126acb5e2bb8fc3514359ddaf059794e23dbd','2025-12-28 16:34:10'),
+(16,4,'','2025-12-27 15:56:28','','617acf46659bb764b8cf0fec0056d2c08e33b5cf8038f150511c0ddd316fffad','2025-12-28 16:56:28'),
+(17,4,'','2025-12-28 13:39:40','','09cdd4831eff4f30e0629eb3b51b94b6a2c8a49f60b60f04bcb04e95e696772e','2025-12-29 14:39:40'),
+(18,4,'','2025-12-28 14:57:44','','847f88bb796cb80abfe1338a13fd25e49f38d796bb7b19207610a75efed6f01d','2025-12-29 15:57:44');
 /*!40000 ALTER TABLE `session` ENABLE KEYS */;
+UNLOCK TABLES;
+commit;
+
+--
+-- Table structure for table `telescreen_logs`
+--
+
+DROP TABLE IF EXISTS `telescreen_logs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `telescreen_logs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_user` int(11) DEFAULT NULL,
+  `visited_url` text DEFAULT NULL,
+  `referrer` text DEFAULT NULL,
+  `page_title` varchar(255) DEFAULT NULL,
+  `user_agent` text DEFAULT NULL,
+  `language` varchar(10) DEFAULT NULL,
+  `screen` varchar(20) DEFAULT NULL,
+  `cookies` text DEFAULT NULL,
+  `ip` varchar(45) DEFAULT NULL,
+  `created` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `telescreen_logs`
+--
+
+LOCK TABLES `telescreen_logs` WRITE;
+/*!40000 ALTER TABLE `telescreen_logs` DISABLE KEYS */;
+set autocommit=0;
+INSERT INTO `telescreen_logs` VALUES
+(1,1,'http://localhost/netsoc2/','http://localhost/','','Mozilla/5.0 (X11; Linux x86_64; rv:145.0) Gecko/20100101 Firefox/145.0','en-US','1920x1080','usersession=617acf46659bb764b8cf0fec0056d2c08e33b5cf8038f150511c0ddd316fffad','127.0.0.1','2025-12-27 18:48:32'),
+(2,1,'http://localhost/netsoc2/','','','Mozilla/5.0 (X11; Linux x86_64; rv:145.0) Gecko/20100101 Firefox/145.0','en-US','1920x1080','usersession=617acf46659bb764b8cf0fec0056d2c08e33b5cf8038f150511c0ddd316fffad','127.0.0.1','2025-12-28 14:41:48'),
+(3,4,'http://localhost/electro_depot_fake/','','Electro Depot (fake)','Mozilla/5.0 (X11; Linux x86_64; rv:145.0) Gecko/20100101 Firefox/145.0','en-US','1920x1080','usersession=617acf46659bb764b8cf0fec0056d2c08e33b5cf8038f150511c0ddd316fffad','127.0.0.1','2025-12-28 14:54:00'),
+(4,3,'http://localhost/floralis_fake/','','Floralis (fake)','Mozilla/5.0 (X11; Linux x86_64; rv:145.0) Gecko/20100101 Firefox/145.0','en-US','1920x1080','usersession=617acf46659bb764b8cf0fec0056d2c08e33b5cf8038f150511c0ddd316fffad','127.0.0.1','2025-12-28 14:56:40');
+/*!40000 ALTER TABLE `telescreen_logs` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
 
@@ -182,33 +288,11 @@ CREATE TABLE `users` (
   `deleted` tinyint(1) NOT NULL DEFAULT 0,
   `created` timestamp NULL DEFAULT current_timestamp(),
   `profile_pic` varchar(500) DEFAULT NULL,
+  `promote` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id_user`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
-
-CREATE TABLE follow (    
-    id_follower INT NOT NULL,    
-    id_followed INT NOT NULL,    
-    followed_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id_follower, id_followed),
-    FOREIGN KEY (id_follower) REFERENCES users(id_user) ON DELETE CASCADE,
-    FOREIGN KEY (id_followed) REFERENCES users(id_user) ON DELETE CASCADE) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-CREATE TABLE telescreen_logs (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    id_user INT NULL,
-    visited_url TEXT,
-    referrer TEXT,
-    page_title VARCHAR(255),
-    user_agent TEXT,
-    language VARCHAR(10),
-    screen VARCHAR(20),
-    cookies TEXT,
-    ip VARCHAR(45),
-    created DATETIME
-);
 
 --
 -- Dumping data for table `users`
@@ -218,8 +302,9 @@ LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 set autocommit=0;
 INSERT INTO `users` VALUES
-(1,'Faputa',NULL,'test@gmail.com','2025-12-17 12:31:14','$2y$12$zpEloaPwcTIqgcMU7rr5d.Qc2JUrQQ9D369x.3jo6a6PU8M8sH.ue',0,'2025-12-24 16:21:36','https://www.w3schools.com/howto/img_avatar.png'),
-(3,'FaputaSosu',NULL,'anavrynlod@gmail.com','2025-12-24 16:44:31','$2y$12$3/81aUOQtDjbGAmVd6AnD./NG5c3pvwk6oHIxnL8rFdu/OoCimQVm',0,'2025-12-24 16:44:31','https://i.redd.it/ikw7zohexlvb1.png');
+(1,'Faputa',NULL,'test@gmail.com','2025-12-17 12:31:14','$2y$12$zpEloaPwcTIqgcMU7rr5d.Qc2JUrQQ9D369x.3jo6a6PU8M8sH.ue',0,'2025-12-24 16:21:36','https://www.w3schools.com/howto/img_avatar.png',1),
+(3,'FaputaSosu',NULL,'anavrynlod@gmail.com','2025-12-24 16:44:31','$2y$12$3/81aUOQtDjbGAmVd6AnD./NG5c3pvwk6oHIxnL8rFdu/OoCimQVm',0,'2025-12-24 16:44:31','https://i.redd.it/ikw7zohexlvb1.png',1),
+(4,'Stark',NULL,'bastardnaminzo@et.esiea.fr','2025-12-27 15:34:04','$2y$12$onExNbOiO2XhMl4E2EWxLO7RiipGDpCNn2nsl8n0sqfLhDiytEcVm',0,'2025-12-27 15:34:04','https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic1.cbrimages.com%2Fwordpress%2Fwp-content%2Fuploads%2F2023%2F12%2Fthe-eminence-in-shadow-john-smith.jpg&f=1&nofb=1&ipt=2092f1647d050b399739f2db5f9a99a282c28c4ac49483914f5b388a85d3166b',0);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -233,4 +318,4 @@ commit;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2025-12-27  4:03:51
+-- Dump completed on 2025-12-28 15:59:13
